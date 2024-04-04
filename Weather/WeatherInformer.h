@@ -1,12 +1,12 @@
 /**************************************************************************************
-   
-	Проект : Weather
 
-	Модуль : WeatherInformer.h
+	Project : Weather
 
-	Описание : Модуль содержит определения типов и функций для класса WeatherInformer,
-	           который позволяет извлекать прогноз погоды на завтра для определённого 
-			   города из определённого источника.
+	Module : WeatherInformer.h
+
+	Description : This module contains type definitions and function declarations for the WeatherInformer class,
+				  which allows extracting weather forecast for tomorrow for a specific
+				  city from a specific source.
 
 **************************************************************************************/
 
@@ -17,146 +17,144 @@
 
 #include "WeatherInfo.h"
 
-//  Определние размеров строковых данных
+// Definition of string data sizes
 #define REQUEST_SIZE 256
 #define SOURCE_NAME_SIZE 128
 
-// Определение типов данных для методов класса WeatherInformer.
-// Повторяющиеся определения введены для поддержания единой 
-// концепции проектирования и для повышения читабельности кода.
-typedef int (*WeatherInformer_DataWriter_Method)(char *, size_t, size_t, char **);
-typedef int (*WeatherInformer_GetData_Method)(void *);
-typedef void (*WeatherInformer_SetCityName_Method)(void*, char *);
-typedef void (*WeatherInformer_SetSourceName_Method)(void*, char *);
-typedef void (*WeatherInformer_Show_Method)(void*);
-typedef void (*WeatherInformer_CelsiusToFahrenheit_Method)(void *);
-typedef void (*WeatherInformer_FahrenheitToCelsius_Method)(void *);
-typedef void (*WeatherInformer_CreateHttpRequest_Method)(void *);
-typedef void (*WeatherInformer_ParseJsonData_Method)(void *);
+// Definition of data types for WeatherInformer class methods.
+// Repeated definitions are introduced to maintain a unified 
+// design concept and to enhance code readability.
+typedef int(*WeatherInformer_DataWriter_Method)(char *, size_t, size_t, char **);
+typedef int(*WeatherInformer_GetData_Method)(void *);
+typedef void(*WeatherInformer_SetCityName_Method)(void*, char *);
+typedef void(*WeatherInformer_SetSourceName_Method)(void*, char *);
+typedef void(*WeatherInformer_Show_Method)(void*);
+typedef void(*WeatherInformer_CelsiusToFahrenheit_Method)(void *);
+typedef void(*WeatherInformer_FahrenheitToCelsius_Method)(void *);
+typedef void(*WeatherInformer_CreateHttpRequest_Method)(void *);
+typedef void(*WeatherInformer_ParseJsonData_Method)(void *);
 
-// Определение структуры класа WeatherInformer
+// Structure definition of the WeatherInformer class
 typedef struct _WeatherInformer
 {
-   // Источник прогноза погоды
-   char sourceName[SOURCE_NAME_SIZE];
-   
-   // Запрос на получение данных
-   // прогноза погоды
-   char httpReq[REQUEST_SIZE];
+	// Weather forecast source
+	char sourceName[SOURCE_NAME_SIZE];
 
-   // Буфер для хранения данных
-   // прогноза погоды
-   char * buffer;
+	// Request to obtain weather forecast data
+	char httpReq[REQUEST_SIZE];
 
-   // Размер буфера
-   int bufSize;
+	// Buffer for storing weather forecast data
+	char * buffer;
 
-   // Шкала температур
-   int scale;
+	// Buffer size
+	int bufSize;
 
-   // Код ошибки
-   int error;
-   
-   // Информация о прогнозе погоды
-   // после анализа данных из буфера
-   PWEATHER_INFO wInfo;
+	// Temperature scale
+	int scale;
 
-   // Определение методов
+	// Error code
+	int error;
 
-   // Запись данных из источника в буфер
-   WeatherInformer_DataWriter_Method DataWriter;
+	// Weather forecast information
+	// after analyzing data from the buffer
+	PWEATHER_INFO wInfo;
 
-   // Подключение к источнику и извлечение данных прогноза погоды
-   WeatherInformer_GetData_Method GetData;
+	// Method definitions
 
-   // Установка навания города
-   WeatherInformer_SetCityName_Method SetCityName;
+	// Write data from the source to the buffer
+	WeatherInformer_DataWriter_Method DataWriter;
 
-   // Установка имени источника
-   WeatherInformer_SetSourceName_Method SetSourceName;
+	// Connect to the source and extract weather forecast data
+	WeatherInformer_GetData_Method GetData;
 
-   // Отображение данных прогноза погоды на экран
-   WeatherInformer_Show_Method Show;
+	// Set city name
+	WeatherInformer_SetCityName_Method SetCityName;
 
-   // Преобразование данных температуры из шкалы Цельсия в шкалу Фаренгейта
-   WeatherInformer_CelsiusToFahrenheit_Method CelsiusToFahrenheit;
-   
-   // Преобразование данных температуры из шкалы Фаренгейта в шкалу Цельсия
-   WeatherInformer_FahrenheitToCelsius_Method FahrenheitToCelsius;
+	// Set source name
+	WeatherInformer_SetSourceName_Method SetSourceName;
 
-   // Формирование запроса к источнику данных
-   WeatherInformer_CreateHttpRequest_Method CreateHttpRequest;
+	// Display weather forecast data on the screen
+	WeatherInformer_Show_Method Show;
 
-   // Анализ данных полученных от источника в формате JSON
-   WeatherInformer_ParseJsonData_Method ParseJsonData;
+	// Convert temperature data from Celsius scale to Fahrenheit scale
+	WeatherInformer_CelsiusToFahrenheit_Method CelsiusToFahrenheit;
+
+	// Convert temperature data from Fahrenheit scale to Celsius scale
+	WeatherInformer_FahrenheitToCelsius_Method FahrenheitToCelsius;
+
+	// Form HTTP request to the data source
+	WeatherInformer_CreateHttpRequest_Method CreateHttpRequest;
+
+	// Parse JSON data obtained from the source
+	WeatherInformer_ParseJsonData_Method ParseJsonData;
 } WEATHER_INFORMER, *PWEATHER_INFORMER;
 
-// Конструктор объектов класса WeatherInformer
-PWEATHER_INFORMER WeatherInformer_Constructor(int scale, char * cityName,  char *sourceName, WeatherInformer_CreateHttpRequest_Method CreateHttpRequest, WeatherInformer_ParseJsonData_Method ParseJsonData);
+// Constructor for WeatherInformer class objects
+PWEATHER_INFORMER WeatherInformer_Constructor(int scale, char * cityName, char *sourceName, WeatherInformer_CreateHttpRequest_Method CreateHttpRequest, WeatherInformer_ParseJsonData_Method ParseJsonData);
 
-// Деструктор объектов класса WeatherInformer
+// Destructor for WeatherInformer class objects
 void WeatherInformer_Denstructor(PWEATHER_INFORMER _this);
 
- // Запись данных из источника в буфер
+// Write data from the source to the buffer
 int WeatherInformer_DataWriter(char *data, size_t size, size_t nMemb, char ** buffer);
 
-// Подключение к источнику и извлечение данных прогноза погоды
+// Connect to the source and extract weather forecast data
 int WeatherInformer_GetData(void * _this);
 
-// Установка навания города
+// Set city name
 void WeatherInformer_SetCityName(void* _this, char *cityName);
 
-// Установка имени источника
+// Set source name
 void WeatherInformer_SetSourceName(void* _this, char *sourceName);
 
-// Отображение данных прогноза погоды на экран
+// Display weather forecast data on the screen
 void WeatherInformer_Show(void* _this);
 
-// Преобразование данных температуры из шкалы Цельсия в шкалу Фаренгейта
+// Convert temperature data from Celsius scale to Fahrenheit scale
 void WeatherInformer_CelsiusToFahrenheit(void *_this);
 
-// Преобразование данных температуры из шкалы Фаренгейта в шкалу Цельсия
+// Convert temperature data from Fahrenheit scale to Celsius scale
 void WeatherInformer_FahrenheitToCelsius(void *_this);
 
-// Формирование запроса к источнику данных от worldweatheronline
+// Form HTTP request to the data source from worldweatheronline
 void WeatherInformer_CreateHttpRequest_WWO(void *_this);
 
-// Анализ данных полученных от источника в формате JSON от worldweatheronline
+// Parse JSON data obtained from the source from worldweatheronline
 void WeatherInformer_ParseJsonData_WWO(void *_this);
 
-// Формирование запроса к источнику данных от open-weather.ru
+// Form HTTP request to the data source from open-weather.ru
 void WeatherInformer_CreateHttpRequest_OW(void *_this);
 
-// Анализ данных полученных от источника в формате JSON от open-weather.ru
+// Parse JSON data obtained from the source from open-weather.ru
 void WeatherInformer_ParseJsonData_OW(void *_this);
 
-// Формирование запроса к источнику данных от pogoda.bilets.org
+// Form HTTP request to the data source from pogoda.bilets.org
 void WeatherInformer_CreateHttpRequest_PBO(void *_this);
 
-// Анализ данных полученных от источника в формате JSON от pogoda.bilets.org
+// Parse JSON data obtained from the source from pogoda.bilets.org
 void WeatherInformer_ParseJsonData_PBO(void *_this);
 
-// Формирование запроса к источнику данных от api.wunderground.com
+// Form HTTP request to the data source from api.wunderground.com
 void WeatherInformer_CreateHttpRequest_WG(void *_this);
 
-// Анализ данных полученных от источника в формате JSON от api.wunderground.com
+// Parse JSON data obtained from the source from api.wunderground.com
 void WeatherInformer_ParseJsonData_WG(void *_this);
 
-// Формирование запроса к источнику данных от www.google.com
+// Form HTTP request to the data source from www.google.com
 void WeatherInformer_CreateHttpRequest_GA(void *_this);
 
-// Анализ данных полученных от источника в формате JSON от www.google.com
+// Parse JSON data obtained from the source from www.google.com
 void WeatherInformer_ParseJsonData_GA(void *_this);
 
-// Проверка значения опредеённой записи после 
-// синтаксического анализа JSON
+// Check the value of a specific entry after 
+// JSON syntax analysis
 void CheckJSONValue(json_object * jobj,
 					char * key,
 					PWEATHER_INFO wInfo,
 					char * minTempCName,
 					char * maxTempCName,
 					char * minTempFName,
-					char * maxTempFName,	
+					char * maxTempFName,
 					char * preasurename,
 					char * humidityName,
 					char * windSpeedName,
@@ -164,13 +162,13 @@ void CheckJSONValue(json_object * jobj,
 					char * cloudinessName,
 					char *precipitationName);
 
-// Синтаксический анализ JSON масива
+// JSON array syntax analysis
 void PasreJSONArray(json_object *jobj, char *key,
 					PWEATHER_INFO wInfo,
 					char * minTempCName,
 					char * maxTempCName,
 					char * minTempFName,
-					char * maxTempFName,	
+					char * maxTempFName,
 					char * preasurename,
 					char * humidityName,
 					char * windSpeedName,
@@ -178,17 +176,17 @@ void PasreJSONArray(json_object *jobj, char *key,
 					char * cloudinessName,
 					char *precipitationName);
 
-// Синтаксический анализ JSON данных
+// JSON data syntax analysis
 void JSONParse(json_object * jobj,
-				PWEATHER_INFO wInfo,
-	            char * minTempCName,
-				char * maxTempCName,
-				char * minTempFName,
-				char * maxTempFName,	
-				char * preasureName,
-				char * humidityName,
-				char * windSpeedName,
-				char * windDirectionName,
-				char * cloudinessName,
-				char * precipitationName);
+			   PWEATHER_INFO wInfo,
+			   char * minTempCName,
+			   char * maxTempCName,
+			   char * minTempFName,
+			   char * maxTempFName,
+			   char * preasureName,
+			   char * humidityName,
+			   char * windSpeedName,
+			   char * windDirectionName,
+			   char * cloudinessName,
+			   char * precipitationName);
 #endif

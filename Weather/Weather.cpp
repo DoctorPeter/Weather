@@ -1,14 +1,13 @@
 /**************************************************************************************
-   
-	Проект : Weather
 
-	Модуль : Weather.cpp
+	Project : Weather
 
-	Описание : Программа получает прогноз погоды на зватра из пяти источников, 
-	           которые предоставляют free weather api и передают данные в формате
-			   json. Пользователю информация отображается по кажому источнику отдельно,
-			   а также усреднённый прогноз. Если пользователь пожелает, он может
-			   получить результирующие данные в форматах json и/или xml.
+	Module : Weather.cpp
+
+	Description : The program retrieves weather forecasts for tomorrow from five sources
+				  that provide free weather APIs and pass data in JSON format. The information
+				  is displayed to the user separately for each source, as well as an averaged forecast.
+				  If the user wishes, they can get the resulting data in JSON and/or XML formats.
 
 **************************************************************************************/
 
@@ -16,17 +15,16 @@
 #include <string.h>
 #include "WeatherInformerContainer.h"
 
-// определение результатов проверки 
-// аргументов командной строки
+// Definition of command-line argument check results
 #define ARG_CHECK_OK  0
 #define ARG_CHECK_ERR 1
 
 
 /**************************************************************************************
-   
-    Функция :  Usage 
-	
-	Описание : Отображает пользователю правила использования программы.
+
+	Function :  Usage
+
+	Description : Displays the usage rules of the program to the user.
 
 **************************************************************************************/
 void Usage()
@@ -38,68 +36,68 @@ void Usage()
 	printf("          weather Kiev -F \n");
 	printf("          weather London -C -J\n");
 	printf("          weather Paris -F -X\n\n");
-	printf("If city name have more than one word then use symbol + \n\n");
+	printf("If the city name consists of more than one word, use the plus symbol + \n\n");
 	printf("Example: \n");
 	printf("          weather New+York -C -X\n");
 
 }
 
 /**************************************************************************************
-   
-    Функция :  ArgCheck 
-	
-	Параметры : 
-				argc - количество параметров
-				argv - масив параметров
-				scale - тип используемой шкалы температур (Цельсий/Фаренгейт)
-				json_out - нужно ли делать вывод в формате json
-				xml_out - нужно ли делать вывод в формате xml
 
-	Возвращает : код ошибки
+	Function :  ArgCheck
 
-	Описание : Проверяет аргументы командной строки.
+	Parameters :
+				argc - number of command-line arguments
+				argv - array of command-line arguments
+				scale - type of temperature scale used (Celsius/Fahrenheit)
+				json_out - whether to output in JSON format
+				xml_out - whether to output in XML format
+
+	Returns : error code
+
+	Description : Checks the command-line arguments.
 
 **************************************************************************************/
 int ArgCheck(int argc, char ** argv, int * scale, int * json_out, int * xml_out)
 {
-	// Проверка количества параметров
+	// Check the number of parameters
 	if ((argc < 3) || (argc > 5)) return ARG_CHECK_ERR;
-	
-	// Проверка шкалы температур
+
+	// Check the temperature scale
 	if (argc >= 3)
 	{
-		if (strcmp(argv[2], "-C") == 0) 
+		if (strcmp(argv[2], "-C") == 0)
 			*scale = C_SCALE;
 		else
-		if (strcmp(argv[2], "-F") == 0) 
-			*scale = F_SCALE;
-		else
-		   return ARG_CHECK_ERR;
-	
-	}
-	 
-	// Проверка дополнительного вывода json/xml
-	if (argc >= 4)
-	{
-		if (strcmp(argv[3], "-J") == 0) 
-			*json_out = 1;
-		else
-		if (strcmp(argv[3], "-X") == 0) 
-			*xml_out = 1;
-		else
-		   return ARG_CHECK_ERR;
+			if (strcmp(argv[2], "-F") == 0)
+				*scale = F_SCALE;
+			else
+				return ARG_CHECK_ERR;
+
 	}
 
-    // Проверка дополнительного вывода json/xml
-	if (argc == 5)
+	// Check additional JSON/XML output
+	if (argc >= 4)
 	{
-		if (strcmp(argv[4], "-J") == 0) 
+		if (strcmp(argv[3], "-J") == 0)
 			*json_out = 1;
 		else
-		if (strcmp(argv[4], "-X") == 0) 
-			*xml_out = 1;
+			if (strcmp(argv[3], "-X") == 0)
+				*xml_out = 1;
+			else
+				return ARG_CHECK_ERR;
+	}
+
+	// Check additional JSON/XML output
+	if (argc == 5)
+	{
+		if (strcmp(argv[4], "-J") == 0)
+			*json_out = 1;
 		else
-			return ARG_CHECK_ERR;
+			if (strcmp(argv[4], "-X") == 0)
+				*xml_out = 1;
+			else
+				return ARG_CHECK_ERR;
 	}
 
 	return ARG_CHECK_OK;
@@ -107,16 +105,16 @@ int ArgCheck(int argc, char ** argv, int * scale, int * json_out, int * xml_out)
 
 
 /**************************************************************************************
-   
-    Функция :  main 
 
-	Параметры : 
-				argc - количество параметров командной строки
-				argv - масив параметров командной строки
+	Function :  main
 
-	Возвращает : код ошибки
+	Parameters :
+				argc - number of command-line arguments
+				argv - array of command-line arguments
 
-	Описание : Основная функция программы. Точка входа в программу.
+	Returns : error code
+
+	Description : Main function of the program. Entry point of the program.
 
 **************************************************************************************/
 int main(int argc, char ** argv)
@@ -125,7 +123,7 @@ int main(int argc, char ** argv)
 	int json_out = 0;
 	int xml_out = 0;
 
-	// Проверка параметров
+	// Check parameters
 	if (ArgCheck(argc, argv, &scale, &json_out, &xml_out) != ARG_CHECK_OK)
 	{
 		Usage();
@@ -134,32 +132,31 @@ int main(int argc, char ** argv)
 
 	printf("Please wait, working ... \n\n");
 
-	// Создаём контернер погодных информеров
+	// Create a container for weather informers
 	PWEATHER_INFORMER_CONTAINER wInfoContainer = WeatherInformerContainer_Constructor(argv[1], scale);
-	
-	// Получаем данных от источников
-	wInfoContainer -> GetData(wInfoContainer);
 
-	// Анализируем данные
-	wInfoContainer -> ParseData(wInfoContainer);
+	// Get data from sources
+	wInfoContainer->GetData(wInfoContainer);
 
-	// Создаем усреднённую информацию
-	wInfoContainer -> CreateTotalData(wInfoContainer);
+	// Parse data
+	wInfoContainer->ParseData(wInfoContainer);
 
-	// Отображаем результаты на экран
-	wInfoContainer -> Show(wInfoContainer);
+	// Create averaged information
+	wInfoContainer->CreateTotalData(wInfoContainer);
 
-	// Если нужно, то выводим результаты в формате json
+	// Display results on the screen
+	wInfoContainer->Show(wInfoContainer);
+
+	// If necessary, output results in JSON format
 	if (json_out)
-		wInfoContainer -> JsonOutput(wInfoContainer);
-	
-	// Если нужно, то выводим результаты в формате xml
-	if (xml_out)
-		wInfoContainer -> XmlOutput(wInfoContainer);
+		wInfoContainer->JsonOutput(wInfoContainer);
 
-	// Удаляем контейнер
+	// If necessary, output results in XML format
+	if (xml_out)
+		wInfoContainer->XmlOutput(wInfoContainer);
+
+	// Delete the container
 	WeatherInformerContainer_Destructor(wInfoContainer);
-	
+
 	return 0;
 }
-

@@ -1,77 +1,72 @@
 /**************************************************************************************
-   
-	Проект : Weather
 
-	Модуль : WeatherInfo.h
+	Project : Weather
 
-	Описание : Модуль содержит определения типов и функций для класса WeatherInfo,
-	           который содержит в себе информацию о прогнозе погоды на завтра
-			   для определённого города.
+	Module : WeatherInfo.h
+
+	Description : This module contains type definitions and function declarations for the WeatherInfo class,
+				  which contains information about the weather forecast for tomorrow
+				  for a specific city.
 
 **************************************************************************************/
 
 #ifndef WEATHER_INFO_H
 #define WEATHER_INFO_H
 
-// Типы шкал температур
+// Temperature scale types
 #define C_SCALE 0
 #define F_SCALE 1
 
-//  Определние размеров строковых данных
+// Definition of string data sizes
 #define CITY_NANE_SIZE 64
 #define WIND_DIR_SIZE 5
 
+// Definition of the data type for the Show method of the WeatherInfo class
+typedef void(*WeatherInfo_Show_Method)(void*, int);
 
-// Определение типа данных для метода Show
-// класса WeatherInfo
-typedef void (*WeatherInfo_Show_Method)(void*, int);
-
-// Определение структуры класа WeatherInfo
+// Structure definition of the WeatherInfo class
 typedef struct _weatherInfo
 {
-	// Название города
+	// City name
 	char cityName[CITY_NANE_SIZE];
 
-	// Минимальна и максимальная температура
-	// по Цельсию
+	// Minimum and maximum temperature in Celsius
 	int minTempC;
 	int maxTempC;
 
-	// Минимальна и максимальная температура
-	// по Фаренгейту
+	// Minimum and maximum temperature in Fahrenheit
 	int minTempF;
 	int maxTempF;
-	
-	//  Атмосферное давление
+
+	// Atmospheric pressure
 	int preasure;
 
-	// Влажность
+	// Humidity
 	int humidity;
 
-	// Скорость ветра
+	// Wind speed
 	int windSpeed;
 
-	// Направление ветра
+	// Wind direction
 	char windDirection[WIND_DIR_SIZE];
 
-	// Облачность
+	// Cloudiness
 	int cloudiness;
 
-	// Осадки
+	// Precipitation
 	int precipitation;
-	
-	// Метод Show - отображение данных прогноза
-	// погоды на экран
+
+	// Show method - display weather forecast data on the screen
 	WeatherInfo_Show_Method Show;
 } WEATHER_INFO, *PWEATHER_INFO;
 
-// Конструктор класса WeatherInfo
+// Constructor for the WeatherInfo class
 PWEATHER_INFO WeatherInfo_Constructor(void);
 
-// Деструктор класса WeatherInfo
+// Destructor for the WeatherInfo class
 void WeatherInfo_Destructor(PWEATHER_INFO _this);
 
-// Отображение данных прогноза погоды на экран
+// Display weather forecast data on the screen
 void WeatherInfo_Show(void * _this, int scale);
 
 #endif
