@@ -1,17 +1,12 @@
-Программа получает прогноз погоды на зватра из пяти источников, 
-которые предоставляют free weather api и передают данные в формате
-json. Пользователю информация отображается по кажому источнику отдельно,
-а также усреднённый прогноз. Если пользователь пожелает, он может
-получить результирующие данные в форматах json и/или xml.
+The program fetches weather forecasts for tomorrow from five sources, which provide free weather API and transmit data in JSON format. The information is displayed to the user separately for each source, as well as an averaged forecast. If the user wishes, they can obtain the resulting data in JSON and/or XML formats.
 
-Программа использует следующие источники прогноза погоды:
-1. http://free.worldweatheronline.com
-2. http://open-weather.ru
-3. http://pogoda.bilets.org
-4. http://www.wunderground.com
-5. http://www.google.com
+The program utilizes the following weather forecast sources:
 
-Нормально работает только первый. Остальные с горем пополам.
-Найти хороший бесплатный источний погодной информации, который
-передаёт данные в JSON формате очень не просто.
-Если Вы знаете другие источники, то легко сможете вставить их в программу.
+http://free.worldweatheronline.com
+http://open-weather.ru
+http://pogoda.bilets.org
+http://www.wunderground.com
+http://www.google.com
+Only the first one works properly. The others work with difficulty.
+Finding a good free source of weather information that transmits data in JSON format is not easy at all.
+If you know of other sources, you can easily insert them into the program.
